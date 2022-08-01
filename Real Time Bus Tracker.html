@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+
+
+    <title>Real Time Bus Tracker</title>
+    <!-- MDB icon -->
+    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+    <!-- MDB -->
+    <link rel="stylesheet" href="css/mdb.min.css" />
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="codingprojects.js">
+    <link rel="stylesheet" href="codingprojects.css">
+
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css" rel="stylesheet" />
+
+    <style>
+        body {
+            margin: auto;
+        }
+        
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        .map-overlay {
+            position: absolute;
+            left: 0;
+            padding: 10px;
+        }
+    </style>
+
+
+    <link rel="stylesheet" href="fetchUrls.js">
+    <link rel="stylesheet" href="mapanimation.js">
+    <link rel="stylesheet" href="mapmarker.js">
+
+
+
+</head>
+
+<body>
+
+
+
+
+
+
+
+
+    <section class="nav-section">
+
+
+        <nav class="nav-styles navbar-expand-lg fixed-top ">
+            <div class="nav-styles">
+
+                <div class="collapse navbar-collapse" id="navbarRightAlignExample">
+                    <container class="all-text-default">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0" class="all-text-default">
+
+                            <li class="nav-item" style="padding-left: 15px">
+                                <a class="nav-link active hvr-underline-from-right" class="all-text-default " aria-current="page " data-mdb-ripple-color="#08BC89 " href="# ">Home</a>
+                            </li>
+
+                            <!-- breadcrumb icon -->
+                            <div class="div-align">
+                                <i class="fas fa-angle-right"></i>
+                            </div>
+                            <!-- breadcrumb icon end -->
+
+                            <!-- breadcrumb current page -->
+                            <li class="nav-item" class="all-text-default">
+                                <a class="nav-link hvr-underline-from-right" class="all-text-default " aria-current="page">Real Time Bus Tracker </a>
+                            </li>
+                            <!-- breadcrumb current page end -->
+
+                            <!-- dropdown menu  -->
+                            <li class="nav-item" class="all-text-default">
+
+                                <div class="btn-group shadow-0 dropdown-align">
+                                    <button type="button" class="btn btn-light dropdown-toggle" data-mdb-toggle="dropdown" data-mdb-ripple-color="#08BC89 ">Coding Projects</button>
+
+                                    <ul class="dropdown-menu " style="background-color: #ffffff">
+
+                                        <li>
+                                            <a class="dropdown-item hvr-underline-from-right " style="color: #000000" data-mdb-ripple-color="light " data-mdb-ripple-color="#08BC89 " href="# ">PacMan Exercise</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item hvr-underline-from-right " style="color: #000000; " data-mdb-ripple-color="#08BC89 " href="# ">Eye Movement Exercise </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item hvr-underline-from-right " style="color: #000000; " data-mdb-ripple-color="#08BC89 " href="# ">Real Time Bus Tracker</a>
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+                            </li>
+
+
+
+
+
+                            <div class="cta-btn-nav-div">
+
+                                <button type="button" class="btn btn-danger " data-mdb-ripple-color="#09bc8a " style="background-color:#40b1ce" onclick="move()">Show stops between MIT and Harvard <i class="fas fa-bus "></i></button>
+
+                            </div>
+
+
+                    </container>
+
+                </div>
+
+
+
+
+
+            </div>
+
+
+            <!-- NEW NEW NEW NEW NEW NEW NEW NEW -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!--Grid row-->
+
+
+
+        <div class="container-fluid">
+
+
+            <div class="map-overlay top">
+
+            </div>
+
+
+        </div>
+
+        <div id="map">
+
+
+
+            <script>
+                mapboxgl.accessToken = 'pk.eyJ1Ijoic29mdGV4cGVyaW1lbnQiLCJhIjoiY2tjMngyZm9rMDFvajJzczJ3aWo0bnh6aiJ9.Bc_qK9Xf8SFBXkFM_x2gpg';
+
+                var map = new mapboxgl.Map({
+                    container: 'map',
+                    style: 'mapbox://styles/mapbox/streets-v11',
+                    center: [-71.104081, 42.365554],
+                    zoom: 14
+                });
+
+                var marker = new mapboxgl.Marker()
+                    .setLngLat([-71.092761, 42.357575])
+                    .addTo(map);
+
+                const busStops = [
+                    [-71.093729, 42.359244],
+                    [-71.094915, 42.360175],
+                    [-71.095800, 42.360698],
+                    [-71.099558, 42.362953],
+                    [-71.103476, 42.365248],
+                    [-71.106067, 42.366806],
+                    [-71.108717, 42.368355],
+                    [-71.110799, 42.369192],
+                    [-71.113095, 42.370218],
+                    [-71.115476, 42.372085],
+                    [-71.117585, 42.373016],
+                    [-71.118625, 42.374863]
+                ];
+
+                let counter = 0;
+
+                function move() {
+                    setTimeout(() => {
+                        if (counter >= busStops.length) return;
+                        marker.setLngLat(busStops[counter]);
+                        counter++;
+                        move();
+                    }, 1000);
+                }
+            </script>
+
+        </div>
+
+
+
+        </div>
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- DO NOT CHANGE THIS LINE OF CODE -->
+        <script src="./codingprojects.js"></script>
+        <!-- MDB -->
+        <script type="text/javascript" src="js/mdb.min.js"></script>
+        <!-- Custom scripts -->
+        <script type="text/javascript"></script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+
+
+
+<section class="footer-section ">
+
+
+
+    <container class="content-container ">
+
+
+
+
+
+
+
+
+    </container>
+
+</section>
+
+
+<body>
+
+</body>
+
+<section>
+
+    <div class="ocean " style="margin-bottom: 120px; ">
+        <div class="wave "></div>
+        <div class="wave "></div>
+    </div>
+
+</section>
+
+
+<footer class=" text-center text-white fixed-bottom footer-css " style="background-color: #045973; ">
+
+
+
+
+
+
+    <div class="container p-4 pagination-styles-parent">
+
+
+        <div class="card">
+
+            <div class="card-body">
+
+
+                <button type="button " class="btn btn-primary " data-mdb-ripple-color="#09BC8A " style="background-color:#4F4F4F "> 1 </button>
+
+
+                <button type="button " class="btn-margins btn btn-primary " data-mdb-ripple-color="#09bc8a " style="background-color: #4F4F4F; ">2</button>
+
+                <button type="button " class="btn btn-dark " class="btn-margins btn " data-mdb-ripple-color="#fff " style="background-color: #09BC8A; ">3</button>
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+        <div class=" pagination-align d-flex align-items-center justify-content-center pagination-styles-child" class="btn-group border " role="group ">
+
+
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Copyright -->
+
+
+
+
+</footer>
+
+</section>
+
+
+
+
+
+
+
+
+</html>
